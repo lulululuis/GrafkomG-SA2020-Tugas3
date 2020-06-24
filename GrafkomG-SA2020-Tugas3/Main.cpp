@@ -1,7 +1,27 @@
 #include <iostream>
 #include <GL/freeglut.h>
+#include <stdlib.h>
 
 bool* keys = new bool[256];
+float new_x = 0;
+float new_y = 0;
+bool but = true;
+
+void Mouse(int button, int state, int x, int y) {
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		but = true;
+	}
+
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
+		but = false;
+}
+
+void Motion(int x, int y) {
+	if (but) {
+		system("CLS");
+		std::cout << "mouseX: " << x << " | " << "mouseY: " << y << "\n";
+	}
+}
 
 void keyDown(unsigned char key, int x, int y){
 	keys[key] = true;
@@ -10,14 +30,6 @@ void keyDown(unsigned char key, int x, int y){
 void keyUp(unsigned char key, int x, int y){
 	keys[key] = false;
 	std::cout << " ";
-}
-
-void Mouse(int button, int state, int x, int y) {
-	if(button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
-		std::cout << "mouseX: " << x << " | " << "mouseY: " << y << "\n";
-
-	//if(button == GLUT_LEFT_BUTTON && state == GLUT_UP)
-
 }
 
 void display(){
@@ -36,10 +48,11 @@ int main(int argc, char** argv) {
 	glutCreateWindow("Keyboard");
 	glutDisplayFunc(display);
 
+	glutMouseFunc(Mouse);
+	glutMotionFunc(Motion);
 	glutKeyboardFunc(keyDown);
 	glutKeyboardUpFunc(keyUp);
-	glutMouseFunc(Mouse);
-
+	
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 
 	glutMainLoop();
